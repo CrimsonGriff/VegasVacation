@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Trip Planning Website - Home</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header style="position: relative;">
+    <div class="top-bar">
+        <div id="userStatus" style="font-weight: bold;">User : Role</div>
+        <div id="notificationIcon" style="cursor: pointer;">
+            🔔
+            <span id="notificationBadge">0</span>
+        </div>
+    </div>
+
+    <h1>Welcome to the Trip Planner</h1>
+
+    <nav>
+        <a href="submit-event.html">Submit Event</a>
+        <a href="index.html" id="logoutLink">Logout</a>
+        <a href="admin-approvals.html" id="adminLink" style="display: none;">Approvals</a>
+    </nav>
+</header>
+
+
+<main style="padding: 20px;">
+
+    <section id="calendarSection" class="full-width-section">
+        <h2>November 2025 Calendar</h2>
+        <div id="calendar"></div>
+    </section>
+
+    <!-- Popup Modal -->
+    <div id="eventModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 id="modalDateTitle"></h3>
+            <div id="modalEvents"></div>
+        </div>
+    </div>
+
+    <div id="notificationModal" class="modal" style="display: none;">
+        <div class="modal-content" style="width: 300px;">
+            <span class="close" id="closeNotificationModal" style="position: absolute; top: 10px; right: 15px; font-size: 20px; cursor: pointer;">&times;</span>
+            <h3>Notifications</h3>
+            <div id="notificationsList"></div>
+            <a href="notifications.html" style="display: block; margin-top: 10px; text-align: center; font-weight: bold;">View All ➔</a>
+        </div>
+    </div>
+    
+
+</main>
+
+<footer>
+    <p>&copy; 2025 Trip Planning Website</p>
+</footer>
+
+<script>
+document.getElementById('logoutLink').addEventListener('click', function(e) {
+    e.preventDefault();
+    localStorage.removeItem('loggedInUser');
+    setTimeout(function() {
+        window.location.href = 'index.html';
+    }, 100); // Small delay so localStorage clears first
+});
+window.onload = function() {
+    // Build Calendar
+const calendarDiv = document.getElementById('calendar');
+const modal = document.getElementById('eventModal');
+const modalDateTitle = document.getElementById('modalDateTitle');
+const modalEvents = document.getElementById('modalEvents');
+const closeModal = document.querySelector('.close');
+
+const events = JSON.parse(localStorage.getItem('events')) || [];
+const approvedEvents = events.filter(event => event.status === "approved");
+
+// Helper: Get events for a day
+function getEventsForDay(day) {
+    return approvedEvents.filter(event => parseInt(event.day) === day);
+}
+
+// Build November 2025 calendar grid
+function buildCalendar() {
+    const startDay = 5; // November 1, 2025 is a Saturday (index 5 if Sunday=0)
+    const daysInMonth = 30;
+    let dayCount = 1;
+
+    let calendarHTML = '<div class="calendar-grid">';
+    
+    // Add empty slots before Nov 1
+    for (let i = 0; i < startDay; i++) {
+        calendarHTML += '<div class="calendar-cell empty"></div>';
+    }
+
+    // Add days of the month
+    while (dayCount <= daysInMonth) {
+        const eventsToday = getEventsForDay(dayCount);
+        calendarHTML += `
+            <div class="calendar-cell ${eventsToday.length > 0 ? 'has-events' : ''}" onclick="openDay(${dayCount})">
+                <div class="day-number">${dayCount}</div>
+            </div>
+        `;
+        dayCount++;
+    }
+
+    // Fill the last row with empty slots if needed
+    const totalCells = startDay + daysInMonth;
+    const remainingCells = 7 - (totalCells % 7);
+    if (remainingCells < 7) {
+        for (let i = 0; i < remainingCells; i++) {
+            calendarHTML += '<div class="calendar-cell empty"></div>';
+        }
+    }
+
+    calendarHTML += '</div>';
+    calendarDiv.innerHTML = calendarHTML;
+}
+
+
+// Open Day Popup
+function openDay(day) {
+    const eventsToday = getEventsForDay(day);
+    if (eventsToday.length === 0) {
+        alert('No approved events for this day.');
+        return;
+    }
+
+    modalDateTitle.innerText = `November ${day}, 2025`;
+    modalEvents.innerHTML = '';
+
+    eventsToday.forEach(event => {
+        modalEvents.innerHTML += `
+            <div class="event-popup-card">
+                <h4>${event.title}</h4>
+                <p><strong>Time:</strong> ${event.time}</p>
+                <p>${event.description}</p>
+            </div>
+        `;
+    });
+
+    modal.style.display = "flex";
+}
+window.openDay = openDay;
+
+// Close Modal
+closeModal.onclick = function() {
+    modal.style.display = "none";
+};
+
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+    };
+
+    buildCalendar();
+
+
+};
+    
+    </script>
+
+<script>
+    // Show Admin Link if user is Admin
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    if (loggedInUser && loggedInUser.isAdmin) {
+        document.getElementById('adminLink').style.display = 'inline-block';
+    }
+    </script>   
+    
+    <script>
+    let user = loggedInUser || JSON.parse(localStorage.getItem('loggedInUser'));
+
+if (user) {
+    const role = user.isAdmin ? 'Admin' : 'User';
+    document.getElementById('userStatus').innerText = `${user.firstName} : ${role}`;
+} else {
+    document.getElementById('userStatus').innerText = `Not Logged In`;
+}
+        </script>
+        
+        <script>
+            // Open Notification Modal on Bell Click
+            document.getElementById('notificationIcon').addEventListener('click', () => {
+                const user = JSON.parse(localStorage.getItem('loggedInUser'));
+                if (user) {
+                    localStorage.setItem(`readNotifications_${user.username}`, 'true');
+                    updateNotificationBadge();
+                }
+            
+                const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+                const myNotifications = notifications.filter(n => n.username === user.username);
+            
+                const list = document.getElementById('notificationsList');
+                list.innerHTML = '';
+            
+                if (myNotifications.length === 0) {
+                    list.innerHTML = "<p>No notifications.</p>";
+                } else {
+                    myNotifications.slice(-3).reverse().forEach(note => {
+                        const p = document.createElement('p');
+                        p.innerHTML = `
+                            ${note.message}<br>
+                            <small style="font-size: 0.8em; color: #666;">${new Date(note.timestamp).toLocaleString()}</small>
+                        `;
+                        list.appendChild(p);
+                    });
+                }
+            
+                document.getElementById('notificationModal').style.display = 'flex';
+            });
+            
+            // Close Notification Modal
+            document.getElementById('closeNotificationModal').addEventListener('click', () => {
+                document.getElementById('notificationModal').style.display = 'none';
+            });
+            </script>
+            
+
+        <script>
+            function updateNotificationBadge() {
+                const user = JSON.parse(localStorage.getItem('loggedInUser'));
+                const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+                const myNotifications = notifications.filter(n => n.username === user.username);
+            
+                const readFlag = localStorage.getItem(`readNotifications_${user.username}`);
+                const badge = document.getElementById('notificationBadge');
+            
+                if (myNotifications.length > 0 && readFlag !== 'true') {
+                    badge.style.display = 'inline-block';
+                    badge.innerText = myNotifications.length;
+                } else {
+                    badge.style.display = 'none';
+                }
+            }
+            updateNotificationBadge();
+            </script>
+            
+               

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Event Approvals - Vegas Vacation 2025</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <div id="userStatus" style="position: absolute; top: 10px; left: 10px; font-weight: bold;"></div>
+    <div class="header-content">
+        <div class="site-title">Vegas Vacation 2025</div>
+        <h1>Admin Approvals</h1>
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="index.html">Logout</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <section id="pendingEventsSection">
+        <h2>Pending Event Requests</h2>
+        <div id="pendingEvents"></div>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2025 Vegas Vacation Planner</p>
+</footer>
+
+<script>
+// Check if user is admin
+const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+if (!loggedInUser || !loggedInUser.isAdmin) {
+    alert('Access denied. Admins only.');
+    window.location.href = 'home.html';
+}
+
+// Load events
+let events = JSON.parse(localStorage.getItem('events')) || [];
+const pendingEventsDiv = document.getElementById('pendingEvents');
+
+// Separate events
+const pendingEvents = events.filter(event => event.status === "pending");
+const otherEvents = events.filter(event => event.status !== "pending");
+
+// Display Pending Events
+if (pendingEvents.length === 0) {
+    pendingEventsDiv.innerHTML = "<p>No pending events at the moment.</p>";
+} else {
+    pendingEvents.forEach((pendingEvent) => {
+    const realIndex = events.findIndex(e => e.title === pendingEvent.title && e.day === pendingEvent.day);
+    if (realIndex !== -1) {
+        const eventCard = document.createElement('div');
+        eventCard.className = 'event-card';
+        eventCard.innerHTML = `
+            <h3>${pendingEvent.title}</h3>
+            <p><strong>Description:</strong> ${pendingEvent.description}</p>
+            <p><strong>Address:</strong> ${pendingEvent.address}</p>
+            <p><strong>Day:</strong> November ${pendingEvent.day}</p>
+            <p><strong>Time:</strong> ${pendingEvent.time}</p>
+            ${pendingEvent.participants ? `<p><strong>Participants:</strong> ${pendingEvent.participants}</p>` : ''}
+            ${pendingEvent.cost ? `<p><strong>Cost:</strong> $${pendingEvent.cost}</p>` : ''}
+            <button onclick="approveEvent(${realIndex})">Approve ✅</button>
+            <button onclick="denyEvent(${realIndex})">Deny ❌</button>
+        `;
+        pendingEventsDiv.appendChild(eventCard);
+    }
+});
+}
+
+// Display All Other Events (History)
+const historySection = document.createElement('section');
+historySection.innerHTML = `<h2>Submission History</h2>`;
+const historyDiv = document.createElement('div');
+historySection.appendChild(historyDiv);
+document.querySelector('main').appendChild(historySection);
+
+if (otherEvents.length === 0) {
+    historyDiv.innerHTML = "<p>No event history yet.</p>";
+} else {
+    otherEvents.forEach((event, eventIndex) => {
+    const eventCard = document.createElement('div');
+    eventCard.className = 'event-card';
+    eventCard.innerHTML = `
+        <h3>${event.title}</h3>
+        <p><strong>Description:</strong> ${event.description}</p>
+        <p><strong>Address:</strong> ${event.address}</p>
+        <p><strong>Day:</strong> November ${event.day}</p>
+        <p><strong>Time:</strong> ${event.time}</p>
+        <p><strong>Status:</strong> <span style="font-weight:bold;">${event.status.toUpperCase()}</span></p>
+        ${event.status === 'denied' && event.denialReason ? `<p><strong>Reason for Denial:</strong> ${event.denialReason}</p>` : ''}
+        ${event.status === 'approved' ? `<button onclick="reDenyEvent(${eventIndex})">Deny ❌</button>` : ''}
+    `;
+    historyDiv.appendChild(eventCard);
+});
+}
+
+// Approve event
+function approveEvent(index) {
+    const realIndex = events.findIndex(e => e.title === pendingEvents[index].title && e.day === pendingEvents[index].day);
+    if (realIndex !== -1) {
+        events[realIndex].status = "approved";
+        localStorage.setItem('events', JSON.stringify(events));
+        alert('Event approved!');
+        location.reload();
+    }
+}
+
+// Deny event
+function denyEvent(index) {
+    let reason = prompt("Please enter a reason for denying this event:");
+    if (reason === null) {
+        alert('Denial cancelled.');
+        return;
+    }
+
+    events[index].status = "denied";
+    events[index].denialReason = reason.trim();
+    localStorage.setItem('events', JSON.stringify(events));
+    alert('Event denied.');
+
+    // NEW PART: Create a notification for the event owner
+    const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+    notifications.push({
+        username: events[index].submittedBy, // We will discuss 'submittedBy' in a second
+        message: `Your event "${events[index].title}" was denied: ${reason.trim()}`,
+        timestamp: Date.now()
+    });
+    localStorage.setItem('notifications', JSON.stringify(notifications));
+
+    location.reload();
+}
+//Deny already approved events
+function reDenyEvent(index) {
+    const realEvent = otherEvents[index];
+    const realIndex = events.findIndex(e => e.title === realEvent.title && e.day === realEvent.day);
+    if (realIndex !== -1) {
+        let reason = prompt("Please enter a reason for denying this approved event:");
+        if (reason === null) {
+            alert('Denial cancelled.');
+            return;
+        }
+        events[realIndex].status = "denied";
+        events[realIndex].denialReason = reason.trim();
+        localStorage.setItem('events', JSON.stringify(events));
+        alert('Event moved to Denied.');
+        location.reload();
+    }
+}
+</script>
+
+
+<script>
+    // Display User Status (FirstName : Admin/User)
+    let user = loggedInUser || JSON.parse(localStorage.getItem('loggedInUser'));
+
+if (user) {
+    const role = user.isAdmin ? 'Admin' : 'User';
+    document.getElementById('userStatus').innerText = `${user.firstName} : ${role}`;
+} else {
+    document.getElementById('userStatus').innerText = `Not Logged In`;
+}
+    </script>
+    
+</body>
+</html>

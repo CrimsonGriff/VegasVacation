@@ -1,0 +1,415 @@
+/* Reset light theme */
+html, body {
+    color-scheme: only light;
+    background-color: #F5F0E6; /* Soft Cream Background */
+    color: #333333; /* Dark grey text */
+    font-family: 'Bangers', 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header */
+header {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 20px 10px;
+    text-align: center;
+    border-top: 1px solid #000000;    /* Thin black line on top */
+    border-bottom: 1px solid #000000; /* Thin black line on bottom */
+    box-sizing: border-box; /* Prevent padding from pushing borders */
+    position: relative;
+}
+
+/* Header Layout */
+.header-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding: 10px;
+}
+
+.site-title {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #000000;
+}
+
+
+nav {
+    margin-top: 10px;
+}
+
+nav a {
+    margin: 0 15px;
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+nav a:hover {
+    color: #0056D2; /* Bright blue on hover */
+}
+
+/* Main Layout */
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+/* Section Cards */
+section {
+    background-color: #ffffff;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    padding: 30px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    border: 3px solid #000000; /* THICK black border */
+}
+
+
+h1, h2 {
+    color: #000000; /* Strong black headings */
+    margin-bottom: 20px;
+    font-weight: 800;
+}
+
+/* Forms */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* <-- Center all child elements horizontally */
+    gap: 15px;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+form input {
+    width: 100%; /* Full width inside form */
+    padding: 12px 15px;
+    border: 1px solid #cccccc;
+    background-color: #ffffff;
+    color: #333333;
+    font-size: 1em;
+    border-radius: 6px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.3s ease;
+}
+
+
+form input:focus {
+    border-color: #0056D2;
+    outline: none;
+}
+
+form input::placeholder {
+    color: #999999;
+}
+
+/* Primary Buttons */
+form button, #logoutBtn, #startBtn {
+    background-color: #D6B97A;
+    color: #ffffff;
+    border: 3px solid #000000;
+    padding: 14px 20px;
+    font-size: 1.1em;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 6px 10px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease;
+}
+
+form button:hover, #logoutBtn:hover, #startBtn:hover {
+    transform: scale(1.05);
+}
+
+/* Logout Button Special Color */
+#logoutBtn {
+    background-color: #A80E0E; /* Deep red logout */
+    color: #ffffff;
+    margin-top: 15px;
+}
+
+#logoutBtn:hover {
+    background-color: #D9504D; /* Lighter coral hover */
+    transform: translateY(-2px);
+}
+
+/* Horizontal Rule */
+hr {
+    width: 80%;
+    max-width: 500px;
+    margin: 40px auto;
+    border: none;
+    border-top: 1px solid #dddddd;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #ffffff;
+    color: #000000;
+    font-size: 0.9em;
+    border-top: 1px solid #dddddd;
+    margin-top: 40px;
+}
+/* Hero Section */
+.hero {
+    background-color: #F5F0E6; /* match site background */
+    padding: 80px 20px;
+    text-align: center;
+    width: 100%;
+    border: none !important; /* 👈 Force remove */
+}
+
+.hero-content {
+    background-color: #ffffff; /* white inner box */
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 30px;
+    border: 3px solid #000000; /* BLACK border around hero box */
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.8); /* subtle comic pop effect */
+}
+
+.hero h1 {
+    font-size: 2.8em;
+    font-weight: 800;
+    color: #000000;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 1.2em;
+    color: #555555;
+    margin-bottom: 30px;
+}
+
+/* Call-to-Action Button */
+#startBtn {
+    background-color: #D6B97A; /* Matching beige */
+    color: #ffffff;
+    border: none;
+    padding: 14px 28px;
+    font-size: 1.1em;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#startBtn:hover {
+    background-color: #C5A866;
+    transform: translateY(-2px);
+}
+
+#submitEventBtn {
+    display: block;
+    margin: 30px auto;
+    background-color: #D6B97A;
+    color: #ffffff;
+    border: 3px solid #000000;
+    padding: 14px 28px;
+    font-size: 1.2em;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s, transform 0.2s ease;
+}
+
+#submitEventBtn:hover {
+    background-color: #C5A866;
+    transform: scale(1.05);
+}
+
+.event-card {
+    background-color: #ffffff;
+    border: 3px solid #000000;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.event-card button {
+    margin: 10px 5px 0 5px;
+    padding: 10px 20px;
+    font-weight: bold;
+    border: 2px solid #000000;
+    background-color: #D6B97A;
+    color: #ffffff;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.event-card button:hover {
+    background-color: #C5A866;
+    transform: scale(1.05);
+}
+
+/* Calendar Styles */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-top: 20px;
+}
+
+/* Each Calendar Cell */
+.calendar-cell {
+    background-color: #ffffff;
+    border: 3px solid #000000;
+    height: 100px;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s;
+    border-radius: 8px;
+}
+
+/* Empty cells (before Nov 1 or after Nov 30) */
+.calendar-cell.empty {
+    background-color: #F5F0E6;
+    border: none;
+    cursor: default;
+}
+
+/* Cells that have events */
+.calendar-cell.has-events {
+    background-color: #D6B97A;
+    color: #ffffff;
+}
+
+/* Day number inside each box */
+.day-number {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    font-weight: bold;
+}
+
+.full-width-section {
+    max-width: 1200px; /* Much bigger */
+    width: 95%; /* Responsive on smaller screens */
+}
+
+
+/* Modal Background */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6); /* Dark transparent overlay */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+/* Modal Content Box */
+.modal-content {
+    background-color: #ffffff;
+    padding: 30px;
+    border: 3px solid #000000;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Close Button */
+.close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #000000;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #D9504D; /* Slight red hover */
+}
+
+/* Event Cards inside Modal */
+.event-popup-card {
+    background-color: #F5F0E6;
+    border: 2px solid #000000;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+/* Smooth fade-in animation */
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+#notificationIcon {
+    font-size: 24px;
+    z-index: 1001;
+}
+
+.top-bar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+    position: absolute;
+    top: 10px;
+    left: 0;
+}
+
+
+#notificationBadge {
+    position: absolute;
+    top: -8px;
+    right: 0px;
+    background: red;
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 4px 7px;
+    font-size: 12px;
+    display: none;
+    z-index: 1001;
+}
+
+#markReadBtn {
+    display: block;
+    margin: 20px auto;
+    padding: 12px 24px;
+    background-color: #D6B97A; /* Your site beige */
+    color: #ffffff;
+    border: 3px solid #000000;
+    font-size: 1.1em;
+    border-radius: 8px;
+    font-family: 'Bangers', cursive;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+#markReadBtn:hover {
+    background-color: #C5A866;
+    transform: scale(1.05);
+}

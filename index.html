@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Trip Planning Website - Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div id="userStatus" style="position: absolute; top: 10px; left: 10px; font-weight: bold;"></div>
+        <div class="header-content">
+            <div class="site-title">Vegas Vacation 2025</div>
+            <h1>Trip Planner</h1>
+            <nav>
+                <a href="#registerForm">Register</a>
+                <a href="#loginForm">Login</a>
+            </nav>            
+        </div>
+    </header>
+
+<main style="padding: 20px;">
+   <section>
+    <h2>Create an Account</h2>
+    <form id="registerForm">
+        <input type="text" id="firstName" placeholder="First Name" required><br><br>
+        <input type="text" id="username" placeholder="Username" required><br><br>
+        <input type="password" id="password" placeholder="Password" required><br><br>
+        <button type="submit">Register</button>
+    </form>
+</section>
+
+
+<section>
+    <h2>Login</h2>
+    <form id="loginForm">
+        <input type="text" id="loginUsername" placeholder="Username" required><br><br>
+        <input type="password" id="loginPassword" placeholder="Password" required><br><br>
+        <button type="submit">Login</button>
+    </form>
+</section>
+
+    <section>
+        <h2>Status</h2>
+        <div id="status">
+            Not logged in.
+        </div>
+    </section>
+
+    <button id="logoutBtn" style="display: none;">Logout</button>
+
+</main>
+
+<footer>
+    <p>&copy; 2025 Trip Planning Website</p>
+</footer>
+
+<script>
+// RESET USERS for new system (ONLY ONCE!)
+// Uncomment this line if you need to fully wipe old users
+// localStorage.removeItem('users');
+
+let users = JSON.parse(localStorage.getItem('users')) || [];
+
+const adminUsernames = ['CoryMeadows', 'friendusername']; // <-- Replace with your usernames
+
+document.getElementById('registerForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const firstName = document.getElementById('firstName').value.trim();
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+
+    if (users.some(user => user.username.toLowerCase() === username.toLowerCase())) {
+        alert('Username already taken!');
+        return;
+    }
+
+    const newUser = {
+        firstName,
+        username,
+        password,
+        isAdmin: adminUsernames.includes(username)
+    };
+
+    users.push(newUser);
+    localStorage.setItem('users', JSON.stringify(users));
+    alert('Registration successful! You can now login.');
+    document.getElementById('registerForm').reset();
+});
+
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value;
+
+    const user = users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
+
+    if (user) {
+        localStorage.setItem('loggedInUser', JSON.stringify(user));
+        window.location.href = 'home.html'; // Redirect to homepage
+    } else {
+        alert('Invalid login credentials.');
+    }
+});
+
+// Logout button functionality
+document.getElementById('logoutBtn').addEventListener('click', function() {
+    localStorage.removeItem('loggedInUser');
+    location.reload(); // Reload page to reset UI
+});
+
+// Display logged-in user if already logged in
+document.getElementById('logoutBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    localStorage.removeItem('loggedInUser');
+    setTimeout(function() {
+        window.location.href = 'index.html';
+    }, 100); // Small delay so localStorage clears first
+});
+</script>
+    
+</body>
+</html>
