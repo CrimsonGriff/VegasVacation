@@ -413,3 +413,9 @@ footer {
     background-color: #C5A866;
     transform: scale(1.05);
 }
+
+.site-logo {
+  height: 60px; /* adjust depending on your logo size */
+  margin: 10px 20px 0 20px;
+  vertical-align: middle;
+}
