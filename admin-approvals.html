@@ -99,15 +99,22 @@ if (otherEvents.length === 0) {
 });
 }
 
-// Approve event
+    //Approve Event
 function approveEvent(index) {
-    const realIndex = events.findIndex(e => e.title === pendingEvents[index].title && e.day === pendingEvents[index].day);
-    if (realIndex !== -1) {
-        events[realIndex].status = "approved";
-        localStorage.setItem('events', JSON.stringify(events));
-        alert('Event approved!');
-        location.reload();
-    }
+    events[index].status = "approved";
+    localStorage.setItem('events', JSON.stringify(events));
+    alert('Event approved!');
+
+    // Notify user
+    const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+    notifications.push({
+        username: events[index].submittedBy,
+        message: `Your event "${events[index].title}" was approved!`,
+        timestamp: Date.now()
+    });
+    localStorage.setItem('notifications', JSON.stringify(notifications));
+
+    location.reload();
 }
 
 // Deny event
