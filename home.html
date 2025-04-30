@@ -134,13 +134,16 @@ function openDay(day) {
     modalEvents.innerHTML = '';
 
     eventsToday.forEach(event => {
-        modalEvents.innerHTML += `
-            <div class="event-popup-card">
-                <h4>${event.title}</h4>
-                <p><strong>Time:</strong> ${event.time}</p>
-                <p>${event.description}</p>
-            </div>
-        `;
+modalEvents.innerHTML += `
+    <div class="event-popup-card">
+        <h4>${event.title}</h4>
+        <p><strong>Time:</strong> ${event.time}</p>
+        <p><strong>Description:</strong> ${event.description}</p>
+        <p><strong>Address:</strong> ${event.address}</p>
+        <p><strong>Cost:</strong> ${event.cost}</p>
+    </div>
+`;
+
     });
 
     modal.style.display = "flex";
