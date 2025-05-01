@@ -146,6 +146,7 @@ modalEvents.innerHTML += `
 
     });
 
+    showAvailability('2025-11-${day}');
     modal.style.display = "flex";
 }
 window.openDay = openDay;
@@ -242,7 +243,36 @@ if (user) {
                 }
             }
             updateNotificationBadge();
-            </script>
-            </body>
+            
+    function toggleAvailability(dateStr) {
+        const availability = JSON.parse(localStorage.getItem('availability')) || {};
+        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+        if (!user || !user.username) return;
+
+        if (!availability[dateStr]) {
+            availability[dateStr] = [];
+        }
+
+        const index = availability[dateStr].indexOf(user.username);
+        if (index === -1) {
+            availability[dateStr].push(user.username);
+        } else {
+            availability[dateStr].splice(index, 1);
+        }
+
+        localStorage.setItem('availability', JSON.stringify(availability));
+        showAvailability(dateStr);
+    }
+
+    function showAvailability(dateStr) {
+        const availability = JSON.parse(localStorage.getItem('availability')) || {};
+        const attendees = availability[dateStr] || [];
+        const attendeeList = document.getElementById('attendeeList');
+        attendeeList.innerText = attendees.length > 0 ? attendees.join(', ') : 'No one yet.';
+    }
+
+</script>
+</body>
 </html>
+            
                
